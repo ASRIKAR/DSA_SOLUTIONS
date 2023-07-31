@@ -1,0 +1,40 @@
+import java.util.*;
+
+public class Solution {
+    public static int longestIncreasingSubsequence(int arr[]) {
+        int n = arr.length;
+        ArrayList<Integer> a = new ArrayList<>();
+        a.add(arr[0]);
+        int length =1;
+        for(int i = 1;i<n;i++){
+            if(arr[i] > a.get(a.size() -1)){
+                a.add(arr[i]);
+                length++;
+            }
+            else{
+                int index = binarySearch(a,arr[i]);
+                a.set(index, arr[i]);
+            }
+        }
+        return length;
+    }
+    public static int binarySearch(ArrayList<Integer> a,int key){
+        int low = 0;
+        int high = a.size() -1;
+        int ans = a.size();
+        while(low <= high){
+            int mid = (low + high)/2;
+            if(key <= a.get(mid)){
+                 ans = mid;
+                high = mid-1;
+               
+            }
+            else{
+                low = mid +1;
+
+            }
+        }
+        return ans;
+    }
+}
+
