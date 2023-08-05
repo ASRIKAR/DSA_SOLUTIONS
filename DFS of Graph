@@ -1,0 +1,20 @@
+
+class Solution {
+    public void solve(int node,ArrayList<Integer> a ,int [] arr,ArrayList<ArrayList<Integer>> adj){
+        arr[node] =1;
+        a.add(node);
+        for(int it : adj.get(node)){
+            if(arr[it] != 1){
+                solve(it,a,arr,adj);
+            }
+        }
+    }
+    // Function to return a list containing the DFS traversal of the graph.
+    public ArrayList<Integer> dfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj) {
+        ArrayList<Integer> a = new ArrayList<Integer>();
+        int  [] arr = new int[V];
+        Arrays.fill(arr,0);
+        solve(0,a,arr,adj);
+        return a;
+    }
+}
