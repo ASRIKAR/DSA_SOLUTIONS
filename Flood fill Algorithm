@@ -1,0 +1,64 @@
+
+class Solution
+{
+    static class pair{
+        int first;
+        int second;
+        pair(int first,int second){
+            this.first = first;
+            this.second = second;
+        }
+    }
+    // public static void dfs(int sr,int sc,int[][] arr,int [][] image,int newColor ,int [] delrow,int [] delcol,int inicolor){
+    //     int n = image.length;
+    //     int m = image[0].length;
+    //     arr[sr][sc] =  newColor;
+    //     for(int i= 0;i < 4;i++){
+    //         int nrow = sr + delrow[i];
+    //         int ncol = sc  + delcol[i];
+    //         if(nrow >=0 && nrow <n && ncol >=0 && ncol < m && image[nrow][ncol] == inicolor && arr[nrow][ncol] != newColor){
+    //             solve(nrow,ncol,arr,image,newColor,delrow,delcol,inicolor);
+    //         }
+    //     }
+    // }
+    public static void bfs(int sr,int sc,int[][] arr,int [][] image,int newColor ,int [] delrow,int [] delcol,int inicolor){
+        int n = image.length;
+        int m = image[0].length;
+        Queue<pair> q = new LinkedList<pair>();
+        arr[sr][sc] = newColor;
+        q.add(new pair(sr,sc));
+        while(!q.isEmpty()){
+            int row = q.peek().first;
+            int col = q.peek().second;
+            q.poll();
+            for(int i =0;i<4;i++){
+                int nrow = row + delrow[i];
+                int ncol = col + delcol[i];
+                if(nrow >=0 && nrow <n && ncol >=0 && ncol < m && image[nrow][ncol] == inicolor && arr[nrow][ncol] != newColor){
+                    arr[nrow][ncol] = newColor;
+                    q.add(new pair(nrow,ncol));
+                }
+            }
+            
+        }
+        
+    }
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor)
+    {
+        int [][] arr = image;
+        int n = image.length;
+        int m = image[0].length;
+        int inicolor= image[sr][sc];
+        // for(int i =0;i<n;i++){
+        //     for(int j = 0;j<m;j++){
+        //         if(image[i][j] == 1){
+        //             solve(i,j,arr,image);
+        //         }
+        //     }
+        // }
+        int []delrow = {0,-1,0,1};
+        int [] delcol = {-1,0,1,0};
+        bfs(sr,sc,arr,image,newColor,delrow,delcol,inicolor);
+        return arr;
+    }
+}
