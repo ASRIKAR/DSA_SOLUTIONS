@@ -1,0 +1,54 @@
+class Solution {
+    static class Pair {
+        int row;
+        int col;
+        int time;
+
+        Pair(int row, int col, int time) {
+            this.row = row;
+            this.col = col;
+            this.time = time;
+        }
+    }
+
+    public int orangesRotting(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        Queue<Pair> queue = new LinkedList<>();
+        int freshCount = 0;
+
+        // Find rotten oranges and count fresh oranges
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 2) {
+                    queue.add(new Pair(i, j, 0));
+                } else if (grid[i][j] == 1) {
+                    freshCount++;
+                }
+            }
+        }
+
+        int timeTaken = 0;
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+        // Perform BFS
+        while (!queue.isEmpty()) {
+            Pair curr = queue.poll();
+            timeTaken = curr.time;
+
+            for (int[] dir : directions) {
+                int newRow = curr.row + dir[0];
+                int newCol = curr.col + dir[1];
+
+                if (newRow >= 0 && newRow < n && newCol >= 0 && newCol < m && grid[newRow][newCol] == 1) {
+                    grid[newRow][newCol] = 2;
+                    queue.add(new Pair(newRow, newCol, curr.time + 1));
+                    freshCount--;
+                }
+            }
+        }
+
+        // Check if all oranges are rotten
+        return freshCount == 0 ? timeTaken : -1;
+    }
+}
