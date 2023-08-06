@@ -1,0 +1,63 @@
+class Solution {
+    static class pair {
+        int first;
+        int second;
+        pair(int first,int second){
+            this.first =  first;
+            this.second = second;
+        }
+    }
+    // Function to find the number of islands.
+    public static void bfs(int i,int j,int [][] arr,char [][] grid){
+        arr[i][j] = 1;
+        int n = grid.length;
+        int m = grid[0].length;
+        Queue<pair> q = new LinkedList<pair>();
+        q.add(new pair(i,j));
+        while(!q.isEmpty()){
+            int row = q.peek().first;
+            int col = q.peek().second;
+            q.poll();
+            for(int delrow = -1 ; delrow <=1;delrow++){
+                for(int delcol = -1;delcol <= 1;delcol++){
+                    int nrow = row + delrow;
+                    int ncol = col + delcol;
+                    if(nrow >= 0 && nrow < n && ncol >=0 && ncol < m && grid[nrow][ncol] == '1' && arr[nrow][ncol] == 0){
+                        arr[nrow][ncol] = 1;
+                        q.add(new pair(nrow,ncol));
+                    }
+                }
+            }
+        }
+        
+    }
+    // public static void dfs(int i , int j , int [][] arr ,char [][] grid){
+    //     arr[i][j] = 1;
+    //     int n = grid.length;
+    //     int m = grid[0].length;
+    //     for(int delrow = -1;delrow <= 1;delrow++){
+    //         for(int delcol = -1;delcol <= 1;delcol++){
+    //             int nrow = i + delrow;
+    //             int ncol = j + delcol;
+    //             if(nrow >= 0 && nrow < n && ncol >=0 && ncol < m && grid[nrow][ncol] == '1' && arr[nrow][ncol] == 0){
+    //                 solve(nrow,ncol,arr,grid);
+    //             }
+    //         }
+    //     }
+    // }
+    public int numIslands(char[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        int arr[][] = new int[n][m];
+        int count =0;
+        for(int i=0;i<n;i++){
+            for(int j =0;j < m;j++){
+                if(arr[i][j]  ==0 && grid[i][j] == '1'){
+                    count++;
+                    bfs(i,j,arr,grid);
+                }
+            }
+        }
+        return count;
+    }
+}
