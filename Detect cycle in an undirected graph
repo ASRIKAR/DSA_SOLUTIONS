@@ -1,0 +1,60 @@
+
+class Solution {
+    static class Pair {
+        int first;
+        int prev;
+        
+        Pair(int first, int prev) {
+            this.first = first;
+            this.prev = prev;
+        }
+    }
+    
+    public static boolean bfs(int i, int[] arr, ArrayList<ArrayList<Integer>> adj) {
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(i, -1));
+        arr[i] = 1;
+        
+        while (!q.isEmpty()) {
+            int node = q.peek().first;
+            int prev = q.peek().prev;
+            q.poll();
+            
+            for (int it : adj.get(node)) {
+                if (arr[it] == 1 && it != prev) {
+                    return true;
+                } else if (arr[it] != 1) {
+                    q.add(new Pair(it, node));
+                    arr[it] = 1;
+                }
+            }
+        }
+        return false;
+    }
+    // public static boolean dfs(int curr,int prev,int [] arr,ArrayList<ArrayList<Integer>> adj){
+    //     arr[curr] =1;
+    //     for(int it : adj.get(curr)){
+    //         if(arr[it] == 1 && it != prev){
+    //             return true;
+    //         }
+    //         else if(arr[it] == 0){
+    //             if(dfs(it,curr,arr,adj)){
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     return false;
+    // }
+    
+    // Function to detect cycle in an undirected graph.
+    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
+        int arr[] = new int[V];
+        for (int i = 0; i < V; i++) {
+            if (arr[i] == 0 && bfs(i, -1,arr, adj)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+}
