@@ -1,0 +1,60 @@
+class Solution
+{
+    static class pair{
+        int row;
+        int col;
+        int dis;
+        pair(int row,int col,int dis){
+            this.row = row;
+            this.col = col;
+            this.dis = dis;
+        }
+    }
+    //Function to find distance of nearest 1 in the grid for each cell.
+    public int[][] nearest(int[][] grid) {
+    int n = grid.length;
+    int m = grid[0].length;
+    int[][] dis = new int[n][m];
+    int[] delrow = {1, -1, 0, 0};
+    int[] delcol = {0, 0, 1, -1};
+    Queue<pair> q = new LinkedList<>();
+
+    // Initialize dis array with maximum values.
+    for (int i = 0; i < n; i++) {
+        Arrays.fill(dis[i], Integer.MAX_VALUE);
+    }
+
+    // Add initial 1 cells to the queue.
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (grid[i][j] == 1) {
+                q.add(new pair(i, j, 0));
+                dis[i][j] = 0;
+            }
+        }
+    }
+
+    while (!q.isEmpty()) {
+        int r = q.peek().row;
+        int c = q.peek().col;
+        int d = q.peek().dis;
+        q.poll();
+
+        for (int k = 0; k < 4; k++) {
+            int nrow = r + delrow[k];
+            int ncol = c + delcol[k];
+            if (nrow >= 0 && nrow < n && ncol >= 0 && ncol < m) {
+                if (dis[nrow][ncol] > d + 1) {
+                    dis[nrow][ncol] = d + 1;
+                    q.add(new pair(nrow, ncol, d + 1));
+                }
+            }
+        }
+    }
+
+    return dis;
+
+
+        
+    }
+}
