@@ -1,0 +1,38 @@
+
+class Solution {
+    public static void solve(int i,int j,int [][] vis,int [][] grid,ArrayList<String> a,int row0,int col0){
+        vis[i][j] = 1;
+        int n = grid.length;
+        int m = grid[0].length;
+        a.add(toString(row0- i , col0 - j));
+        int delrow [] = {-1,0,1,0};
+        int delcol [] = {0,-1,0,1};
+        for(int k =0 ;k<4;k++){
+            int nrow = i + delrow[k];
+            int ncol = j + delcol[k];
+            if(nrow >=0 && nrow < n && ncol >=0 && ncol <m && grid[nrow][ncol] == 1 && vis[nrow][ncol] != 1){
+                solve(nrow,ncol,vis,grid,a,row0,col0);
+            }
+        }
+        
+    }
+    public static String toString(int a , int b){
+        return Integer.toString(a) + " " + Integer.toString(b);
+    }
+    int countDistinctIslands(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        HashSet<ArrayList<String>> hs = new HashSet<>();
+        int vis[][] = new int[n][m];
+        for(int i = 0;i<n;i++){
+            for(int j =0;j<m;j++){
+                ArrayList<String> a = new ArrayList<>();
+                if(grid[i][j] ==1 && vis[i][j] == 0){
+                    solve(i,j,vis,grid,a,i,j);
+                    hs.add(a);
+                }
+            }
+        }
+        return hs.size();
+    }
+}
