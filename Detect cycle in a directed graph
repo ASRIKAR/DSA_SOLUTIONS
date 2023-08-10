@@ -1,0 +1,30 @@
+class Solution {
+  
+    public static boolean solve(int i,int pathvis[] ,int [] vis,ArrayList<ArrayList<Integer>> adj){
+        vis[i] = 1;
+        pathvis[i] = 1;
+        for(int it : adj.get(i)){
+            if(vis[it] == 0){
+                if(solve(it,pathvis,vis,adj))
+                return true;
+            }
+            if(pathvis[it] == 1){
+                return true;
+            }
+        }
+        pathvis[i] = 0;
+        return false;
+    }
+    public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
+        int [] vis = new int[V];
+        int pathvis[] = new int[V];
+        for(int i =0 ;i<V;i++){
+            if(vis[i] == 0){
+                if(solve(i,pathvis,vis,adj) == true){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
