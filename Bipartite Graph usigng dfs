@@ -1,0 +1,33 @@
+class Solution
+{
+    public static boolean isCycle(int i, int color, int[] vis, ArrayList<ArrayList<Integer>> adj){
+        vis[i] = color;
+        
+        for(int it : adj.get(i)){
+            if(vis[it] == -1){
+                if(!isCycle(it, (color == 0) ? 1 : 0, vis, adj)) {
+                    return false;
+                }
+            }
+            else if(vis[it] == vis[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public boolean isBipartite(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        int vis[] = new int[V];
+        Arrays.fill(vis, -1);
+        
+        for(int i = 0; i < V; i++){
+            if(vis[i] == -1){
+                if(!isCycle(i, 0, vis, adj)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
