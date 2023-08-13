@@ -1,0 +1,63 @@
+class Solution {
+    public static class Pair {
+        int first;
+        int second;
+
+        Pair(int first, int second) {
+            this.first = first;
+            this.second = second;
+        }
+    }
+
+    public static void toposort(int i, int[] vis, Stack<Integer> s, List<List<Pair>> adj) {
+        vis[i] = 1;
+        for (Pair p : adj.get(i)) {
+            int v = p.first;
+            if (vis[v] == 0) {
+                toposort(v, vis, s, adj);
+            }
+        }
+        s.add(i);
+    }
+
+    public int[] shortestPath(int N, int M, int[][] edges) {
+        List<List<Pair>> adj = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            ArrayList<Pair> a  = new ArrayList<>();
+            adj.add(a);
+        }
+        for (int i = 0; i < M; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            int w = edges[i][2];
+            adj.get(u).add(new Pair(v, w));
+        }
+        int[] vis = new int[N];
+        Stack<Integer> s = new Stack<>();
+        for (int i = 0; i < N; i++) {
+            if (vis[i] == 0) {
+                toposort(i, vis, s, adj);
+            }
+        }
+        int[] dis = new int[N];
+        Arrays.fill(dis, Integer.MAX_VALUE);
+        dis[0] = 0;
+        while (!s.isEmpty()) {
+            int node = s.pop();
+            for (Pair p : adj.get(node)) {
+                int v = p.first;
+                int w = p.second;
+                if ( dis[node] != Integer.MAX_VALUE && dis[node] + w < dis[v]) { // Check if distance is not MAX_VALUE before comparing
+                    dis[v] = dis[node] + w;
+                }
+            }
+        }
+        // Convert the distances from MAX_VALUE to -1 where appropriate
+        for (int i = 0; i < N; i++) {
+            if (dis[i] == Integer.MAX_VALUE) {
+                dis[i] = -1;
+            }
+        }
+        return dis;
+    }
+}
