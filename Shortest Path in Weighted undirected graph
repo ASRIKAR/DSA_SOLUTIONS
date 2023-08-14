@@ -1,0 +1,60 @@
+class Solution {
+    public static class pair{
+        int first;
+        int second;
+        pair(int first,int second){
+            this.first = first;
+            this.second = second;
+        }
+    }
+    public static List<Integer> shortestPath(int n, int m, int edges[][]) {
+        List<List<pair>> adj = new ArrayList<>();
+        List<Integer> ans = new ArrayList<>();
+        PriorityQueue<pair> pq = new PriorityQueue<>((x,y) -> x.second - y.second);
+        for(int i =0;i<=n;i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int i =0;i<m;i++){
+            adj.get(edges[i][0]).add(new pair(edges[i][1],edges[i][2]));
+            adj.get(edges[i][1]).add(new pair(edges[i][0],edges[i][2]));
+        }
+        int[] dis = new int[n+1];
+        int[] vis = new int[n+1];
+        Arrays.fill(dis,Integer.MAX_VALUE);
+        dis[1] = 0;
+        vis[1] = 1;
+        pq.offer(new pair(1,0));
+        while(!pq.isEmpty()){
+            int node  = pq.peek().first;
+            int dist = pq.peek().second;
+            pq.poll();
+            for(pair p : adj.get(node)){
+                int adjnode = p.first;
+                int w = p.second;
+                if(dis[adjnode] > dis[node] + w){
+                    dis[adjnode] = dis[node] + w;
+                    vis[adjnode] = node;
+                    pq.offer(new pair(adjnode,dis[node] + w));
+                }
+            }
+        }
+        // for(int i = 1;i <= n;i++){
+        //     if(dis[i] == Integer.MAX_VALUE){
+        //         dis[i] = -1;
+        //     }
+        // }
+        if(dis[n] == Integer.MAX_VALUE){
+            ans.add(-1);
+            return ans;
+        }
+        int node = n;
+      
+        while(vis[node] != node){
+            ans.add(node);
+            node = vis[node];
+        }
+        ans.add(vis[1]);
+        Collections.reverse(ans);
+        return ans;
+    }
+}
