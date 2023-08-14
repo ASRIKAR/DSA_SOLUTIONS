@@ -1,0 +1,50 @@
+class Solution {
+    public static class pair{
+        int first;
+        int second;
+        int third;
+        pair(int first ,int second,int third){
+            this.first = first;
+            this.second = second;
+            this.third = third;
+        }
+    }
+    int shortestPath(int[][] grid, int[] source, int[] destination) {
+        int n = grid.length;
+        int m = grid[0].length;
+        int [][] dis = new int[n][m];
+        PriorityQueue<pair> pq = new PriorityQueue<>((x,y) -> x.third - y.third);
+        pq.add(new pair(source[0],source[1],0));
+        for (int[] row : dis) {
+            Arrays.fill(row, Integer.MAX_VALUE);
+        }
+        dis[source[0]][source[1]] =0;
+        int [] disrow = {0,-1,0,1};
+        int [] discol = {-1,0,1,0};
+        while(!pq.isEmpty()){
+            int row = pq.peek().first;
+            int col= pq.peek().second;
+            int dist =  pq.peek().third;
+            pq.poll();
+            if(row == destination[0] && col == destination[1]){
+                return dist;
+            }
+            for(int i = 0;i < 4;i++){
+                int adjrow =  row + disrow[i];
+                int adjcol = col + discol[i];
+                
+                if(adjrow >= 0 && adjrow < n && adjcol >= 0 && adjcol < m  && (grid[adjrow][adjcol] == 1)){
+                    int w = dist + 1;
+                    if(dis[adjrow][adjcol] > dis[row][col] + w){
+                        dis[adjrow][adjcol] = dis[row][col] + w;
+                        pq.offer(new pair(adjrow,adjcol,w));
+                    }
+                }
+            }
+        }
+        // if(dis[destination[0]][destination[1]] == Integer.MAX_VALUE){
+            return -1;
+        // }
+        // return dis[destination[0]][destination[1]];
+    }
+}
