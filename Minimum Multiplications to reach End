@@ -1,0 +1,45 @@
+
+class Solution {
+    public  static class Pair{
+        int first;
+        int second;
+        Pair(int first,int second){
+            this.first = first;
+            this.second = second;
+        }
+    }
+    // public  static class Tuple{
+    //     int first;
+    //     int second;
+    //     int third;
+    //     Tuple(int first,int second,int third;){
+    //         this.first = first;
+    //         this.second = second;
+    //         this.third = third;
+    //     }
+    // }
+    int minimumMultiplications(int[] arr, int start, int end) {
+        
+        int n = arr.length;
+        int dis[] = new int[100000];
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(start,0));
+        Arrays.fill(dis, Integer.MAX_VALUE);
+        while(!q.isEmpty()){
+            int node = q.peek().first;
+            int count = q.peek().second;
+            q.poll();
+            if(node == end){
+                return count;
+            }
+            for(int i :arr){
+                int newnode = (node*i)%100000;
+                if(dis[newnode] > count + 1){
+                    dis[newnode] = count+1;
+                    q.add(new Pair(newnode,count+1));
+                }
+            }
+        }
+        return -1;
+    }
+}
