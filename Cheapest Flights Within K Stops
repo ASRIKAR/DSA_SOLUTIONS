@@ -1,0 +1,60 @@
+
+class Solution {
+    static class Pair {
+        int first;
+        int second;
+        Pair(int first, int second) {
+            this.first = first;
+            this.second = second;
+        }
+    }
+
+    static class Tuple {
+        int first;
+        int second;
+        int third;
+        Tuple(int first, int second, int third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
+        }
+    }
+
+     public int CheapestFLight(int n,int flights[][],int src,int dst,int k) {
+        int[] dis = new int[n];
+        int m = flights.length;
+        List<List<Pair>> adj = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for (int j = 0; j < m; j++) {
+            adj.get(flights[j][0]).add(new Pair(flights[j][1], flights[j][2]));
+        }
+        Queue<Tuple> pq = new LinkedList<>();
+        pq.add(new Tuple(src, 0, 0));
+        Arrays.fill(dis, Integer.MAX_VALUE);
+        dis[src] = 0;
+        while (!pq.isEmpty()) {
+            int node = pq.peek().first;
+            int count = pq.peek().second;
+            int distance = pq.peek().third;
+            pq.poll(); 
+
+            if (count > k) {
+                continue;
+            }
+            for (Pair it : adj.get(node)) {
+                int adjNode = it.first;
+                int adjDistance = it.second;
+                if (dis[adjNode] > distance + adjDistance) {
+                    dis[adjNode] = distance + adjDistance;
+                    pq.add(new Tuple(adjNode, count + 1, dis[adjNode]));
+                }
+            }
+        }
+        if (dis[dst] == Integer.MAX_VALUE) {
+            return -1;
+        }
+        return dis[dst];
+    }
+}
