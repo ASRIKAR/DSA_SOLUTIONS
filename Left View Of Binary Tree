@@ -1,0 +1,20 @@
+
+public class Solution {
+    public static void solve(TreeNode<Integer> root ,int d,int[] maxi){
+        if(root == null ){
+            return;
+        }
+        if(d > maxi[0]){
+            System.out.print(root.data + " ");
+            maxi[0] = d;
+        }
+        solve(root.left,d+1,maxi);
+        solve(root.right,d+1,maxi);
+        
+    }
+    public static void printLeftView(TreeNode<Integer> root) {
+        // Write your code here.
+        int [] maxi = {-1};
+        solve(root,0,maxi);
+    }
+}
