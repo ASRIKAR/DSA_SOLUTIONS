@@ -1,0 +1,49 @@
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    public static  long merge(long [] arr,int left,int mid ,int right){
+        long [] temp = new long[arr.length];
+        int low = left;
+        int high = mid + 1;
+        long count = 0;
+        int i =0;
+        // int i =0;
+        while(low <= mid && high <= right){
+            if(arr[low] <= arr[high]){
+                temp[i++] = arr[low];
+                low++;
+            }
+            else{
+                temp[i++] = arr[high++];
+                count  += (mid - low + 1);
+                
+            }
+        }
+        while(low <= mid){
+            temp[i++] = arr[low++];
+        }
+        while(high <= right){
+            temp[i++] = arr[high++];
+        }
+
+        for(int k =left;k<= right;k++){
+            arr[k] = temp[k - left];
+        }
+        return count;
+    }
+    public static long mergeSort(long [] arr ,int left,int right){
+        long count =0;
+        
+        if(left<right){
+        int mid = (left + right)/2;
+        count  = count + mergeSort(arr,left,mid);
+        count = count + mergeSort(arr,mid +1 , right);
+        count = count + merge(arr,left,mid,right);
+        }
+        return count;
+    }
+    public static long getInversions(long arr[], int n) {
+        // Write your code here.
+       return mergeSort(arr,0,n-1);
+    }
+}
