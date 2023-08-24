@@ -1,0 +1,24 @@
+import java.util.*;
+public class Solution {
+	public static void solve(BinaryTreeNode<Integer> root,BinaryTreeNode<Integer> Node ,List<BinaryTreeNode<Integer>> a){
+		if(root == null){
+	 		return ;
+		}
+		solve(root.left, Node,a);
+		a.add(root);
+		solve(root.right,Node,a);
+	}
+	public static BinaryTreeNode<Integer> inorderSuccesor(BinaryTreeNode<Integer> root, BinaryTreeNode<Integer> node) {
+    	if(root == null && node == null){
+			return null;
+		}
+		List<BinaryTreeNode<Integer>> a = new ArrayList<>();
+		solve(root,node,a);
+		for(int i =0 ; i < a.size() -1; i++){
+			if(a.get(i) == node){
+				return a.get(i +1);
+			}
+		}
+		return null;
+	}
+}
