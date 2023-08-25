@@ -1,0 +1,47 @@
+import java.util.* ;
+import java.io.*; 
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    class TreeNode<T> 
+    {
+       public:
+        T val;
+        TreeNode<T> left;
+        TreeNode<T> right;
+
+        TreeNode(T val) 
+        {
+            this.val = val;
+            left = null;
+            right = null;
+        }
+    };
+
+************************************************************/
+
+public class Solution 
+{
+    public static TreeNode<Integer> constructSBT(ArrayList<Integer> pre, ArrayList<Character> typeNL) 
+    {
+        int[] index = {0}; // To keep track of the current index in pre-order traversal
+        return constructTree(pre, typeNL, index);
+    }
+    
+    public static TreeNode<Integer> constructTree(ArrayList<Integer> pre, ArrayList<Character> typeNL, int[] index) {
+        if (index[0] == pre.size()) {
+            return null;
+        }
+        
+        TreeNode<Integer> root = new TreeNode<>(pre.get(index[0]));
+        index[0]++; // Move to the next element in pre-order
+        
+        if (typeNL.get(index[0] - 1) == 'N') { // Check the type of the last processed node
+            root.left = constructTree(pre, typeNL, index);
+            root.right = constructTree(pre, typeNL, index);
+        }
+        
+        return root;
+    }
+}
