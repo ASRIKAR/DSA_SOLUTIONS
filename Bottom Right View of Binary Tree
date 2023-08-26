@@ -1,0 +1,63 @@
+import java.util.* ;
+import java.io.*; 
+/*************************************************************
+ 
+    Following is the Binary Tree node structure
+
+   class BinaryTreeNode<T> {
+   
+    public T data;
+    public BinaryTreeNode<T> left;
+    public BinaryTreeNode<T> right;
+
+    BinaryTreeNode(T data) {
+        this.data = data;
+        left = right = null;
+    }
+
+};
+
+*************************************************************/
+public class Solution {    
+
+    public static ArrayList<Integer> bottomRightView(BinaryTreeNode<Integer> root) {
+
+        // Write your code here.
+
+        ArrayList<Integer> arr = new ArrayList<>();
+
+        if (root==null)
+
+            return arr;
+
+        Map<Integer,Integer> map = new HashMap<>();
+
+        solve(root,map,0);
+
+        for (Integer key: map.keySet()) {
+
+            arr.add(map.get(key));
+
+        }
+
+        Collections.sort(arr);
+
+        return arr;
+
+    }
+
+    static void solve(BinaryTreeNode<Integer> root,Map<Integer,Integer> map,int d) {
+
+        if (root==null)
+
+            return;
+
+        map.put(d,root.data);
+
+        solve(root.left,map,d+1);
+
+        solve(root.right,map,d);
+
+    }
+
+ } 
