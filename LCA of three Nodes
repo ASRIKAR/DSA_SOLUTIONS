@@ -1,0 +1,24 @@
+public class Solution {
+	public static BinaryTreeNode<Integer> lca(BinaryTreeNode<Integer> root, int node1, int node2){
+		if(root == null || root.data == node1 || root.data == node2){
+			return root;
+		}
+		BinaryTreeNode<Integer> left = lca(root.left,node1,node2);
+		BinaryTreeNode<Integer> right = lca(root.right,node1,node2);
+		if(left == null){
+			return right;
+		}
+		else if(right == null){
+			return left;
+		}
+		else{
+			return root;
+		}
+	}
+    public static BinaryTreeNode<Integer> lcaOfThreeNodes(BinaryTreeNode<Integer> root, int node1, int node2,
+            int node3) {
+				BinaryTreeNode<Integer> node12 = lca(root, node1, node2);
+				return lca(root, node12.data, node3);
+        
+    }
+}
