@@ -1,0 +1,32 @@
+public class Solution {
+    public static boolean isUnival(BinaryTreeNode<Integer> root, int[] count) {
+        if (root == null) {
+            return true;
+        }
+
+        boolean leftIsUnival = isUnival(root.left, count);
+        boolean rightIsUnival = isUnival(root.right, count);
+
+        if (leftIsUnival && rightIsUnival) {
+            if (root.left != null && !root.left.data.equals(root.data)) {
+                return false;
+            }
+            if (root.right != null && !root.right.data.equals(root.data)) {
+                return false;
+            }
+            count[0]++;
+            return true;
+        }
+
+        return false;
+    }
+
+    public static int countUnivalTrees(BinaryTreeNode<Integer> root) {
+        if (root == null) {
+            return 0;
+        }
+        int[] count = {0};
+        isUnival(root, count);
+        return count[0];
+    }
+}
