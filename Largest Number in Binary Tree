@@ -1,0 +1,56 @@
+import java.util.* ;
+import java.io.*; 
+/***********************************************************
+
+    Following is the Binary Tree Node class structure:
+
+	class BinaryTreeNode<T> {
+        T data;
+        BinaryTreeNode<T> left;
+        BinaryTreeNode<T> right;
+
+        public BinaryTreeNode(T data) {
+            this.data = data;
+            left = null
+            right = null
+        }
+    }
+
+***********************************************************/
+
+public class Solution {
+   public static String printLargest(BinaryTreeNode<Integer> root) {
+       if(root == null){
+           return "";
+       }
+        ArrayList<Integer> a = new ArrayList<>();
+        filArrayList(root, a);
+        Collections.sort(a, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer a, Integer b) {
+                String ab = a.toString() + b.toString();
+                String ba = b.toString() + a.toString();
+                return ba.compareTo(ab); // Sort in descending order
+            }
+        });
+        StringBuilder s = new StringBuilder();
+        boolean leadingZeros = true;
+        for (int i : a) {
+            if (leadingZeros && i == 0) {
+                continue;
+            }
+            leadingZeros = false;
+            s.append(i);
+        }
+        return s.length() == 0 ? "0" : s.toString();
+    }
+
+    public static void filArrayList(BinaryTreeNode<Integer> root, ArrayList<Integer> a) {
+        if (root == null) {
+            return;
+        }
+        a.add(root.data);
+        filArrayList(root.left, a);
+        filArrayList(root.right, a);
+    }
+}
