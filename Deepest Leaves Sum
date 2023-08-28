@@ -1,0 +1,52 @@
+import java.util.* ;
+/************************************************************
+
+    Following is the Tree node structure:
+		
+    class TreeNode 
+    {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int val) 
+        {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+    }
+
+************************************************************/
+
+public class Solution {
+    public static int solveHeight(TreeNode root ){
+        if(root == null){
+            return 0;
+        }
+        int left = solveHeight(root.left);
+        int right = solveHeight(root.right);
+        return Math.max(left,right) +1 ;
+    }
+    public static int solve(TreeNode root , int  depth ,int[] sum,int d){
+        if(root == null) {
+            return 0;
+        }
+        if(d == depth && ( root.left == null && root .right == null)){
+            sum[0] =  sum[0] + root.val;
+        }
+        int left = solve(root.left, depth,sum,d +1 );
+        int right = solve(root.right ,depth,sum,d +1);
+        return sum[0];
+    }
+	public static int deepestLeavesSum(TreeNode root) {
+        if(root == null){
+            return 0;
+        }
+		
+        int depth = solveHeight(root);
+        int sum [] = {0};
+        return solve(root,depth ,sum,1);
+        // return sum[0];
+	}
+}
