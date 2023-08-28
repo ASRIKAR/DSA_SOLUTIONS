@@ -1,0 +1,41 @@
+import java.util.* ;
+import java.io.*; 
+/*************************************************************
+
+    Following is the Binary Tree node structure
+
+    class BinaryTreeNode<Integer> {
+        int data;
+        BinaryTreeNode<Integer> left;
+        BinaryTreeNode<Integer> right;
+
+    public BinaryTreeNode(int data) {
+            this.data = data;
+        }
+    }
+
+ *************************************************************/
+
+public class Solution {
+    public static boolean checkTree(BinaryTreeNode<Integer> tree1, BinaryTreeNode<Integer> tree2) {
+        // Write your code here.
+        if(tree1==null&&tree2==null)
+        {
+            return true;
+        }
+        if(tree1==null ||tree2==null)
+        {
+            return false;
+        }
+
+        if(tree1.data!=tree2.data)
+        {
+            return false;
+        }
+
+        boolean option_a=checkTree(tree1.left,tree2.right)&&checkTree(tree1.right,tree2.left);
+        boolean option_b=checkTree(tree1.left, tree2.left)&&checkTree(tree1.right, tree2.right);
+
+        return option_a||option_b;
+    }
+}
