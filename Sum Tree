@@ -1,0 +1,40 @@
+import java.util.*;
+public class Solution {
+    public static BinaryTreeNode<Integer> construct(BinaryTreeNode<Integer> root ){
+        if(root == null || (root.left == null && root.right == null)){
+            return null;
+        }
+        if(root.left != null && root.right != null){
+            root.data = root.left.data + root.right.data;
+        }
+        else if(root.left == null ){
+            root.data = root.right.data;
+        }
+        else{
+            root.data = root.left.data;
+        }
+        construct(root.left);
+        construct(root.right);
+        return root;
+    }
+    public static void solve(BinaryTreeNode<Integer> root,ArrayList<Integer> a){
+        if(root == null ){
+            return ;
+        }
+        if(root.left == null && root.right == null){
+            a.add(0);
+        }
+        else{
+        a.add(root.data);
+        solve(root.left,a);
+        solve(root.right,a);
+        }
+    }
+    public static ArrayList<Integer> sumTree(BinaryTreeNode<Integer> root) {
+        ArrayList<Integer> a = new ArrayList<>();
+        construct(root);
+        solve(root,a);
+        return a;
+    }
+    
+}
