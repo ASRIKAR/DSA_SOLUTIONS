@@ -1,0 +1,19 @@
+
+public class Solution {
+   public static boolean isSymmetric(BinaryTreeNode<Integer> root) {
+        if (root == null) {
+            return true;
+        }
+        return checkSymmetry(root.left, root.right);
+    }
+
+    private static boolean checkSymmetry(BinaryTreeNode<Integer> leftSubtree, BinaryTreeNode<Integer> rightSubtree) {
+        if (leftSubtree == null && rightSubtree == null) {
+            return true;
+        }
+        if (leftSubtree == null || rightSubtree == null || !leftSubtree.data.equals(rightSubtree.data)) {
+            return false;
+        }
+        return checkSymmetry(leftSubtree.left, rightSubtree.right) && checkSymmetry(leftSubtree.right, rightSubtree.left);
+    }
+}
