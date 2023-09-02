@@ -1,0 +1,106 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.*;
+
+public class Solution 
+{
+    public static class pair{
+        int first;
+        int second;
+        pair(int first,int second){
+            this.first= first;
+            this.second = second;
+        }
+    }
+    private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+    public static void main(String[] args) throws IOException 
+    {
+        String[] verticesEdges = br.readLine().trim().split(" ");
+        int vertices = Integer.parseInt(verticesEdges[0].trim());
+        int edges = Integer.parseInt(verticesEdges[1].trim());
+
+        ArrayList<pair> edgeList = new ArrayList<>();
+
+        for (int i = 0; i < edges; i++) {
+            String[] u_v = br.readLine().trim().split(" ");
+            int u = Integer.parseInt(u_v[0].trim());
+            int v = Integer.parseInt(u_v[1].trim());
+            edgeList.add(new pair(u, v));
+        }
+
+        /*
+            1. Complete the input
+            2. Write the appropriate code from here
+        */
+
+        // Define an ArrayList of ArrayLists to represent the adjacency list
+        ArrayList<ArrayList<Integer>> adjacencyList = new ArrayList<>(vertices);
+
+        // Initialize the adjacency list with empty ArrayLists for all vertices
+        for (int i = 0; i < vertices; i++) {
+            adjacencyList.add(new ArrayList<>());
+        }
+
+        // Inside your loop where you read edges, add edges to the adjacency list
+        for (pair edge : edgeList) {
+            int u = edge.first;
+            int v = edge.second;
+
+            // Check if u and v are valid vertex indices
+            if (u >= 1 && u <= vertices && v >= 1 && v <= vertices) {
+                // Adjust vertex indices to start from 0 if necessary
+                u--;
+                v--;
+
+                // Add edges to the adjacency list
+                adjacencyList.get(u).add(v);
+                adjacencyList.get(v).add(u); // If the graph is undirected, add this line as well
+            } else {
+                // Handle invalid input here, such as printing an error message or throwing an exception.
+                System.err.println("Invalid vertex indices: u=" + u + ", v=" + v);
+                // Optionally, you can exit the program or take appropriate action.
+            }
+        }
+        if(ColourTheGraph(adjacencyList, vertices)){
+            System.out.println("YES");
+        }
+        else{
+            System.out.println("NO");
+        }
+    }
+
+    public static boolean ColourTheGraph(ArrayList<ArrayList<Integer>> adj , int V){
+         int[] vis = new int[V];
+    int[] colArr = new int[V];
+    Queue<pair> q = new LinkedList<>();
+
+    for (int start = 0; start < V; start++) {
+        if (vis[start] == 0) {
+            q.add(new pair(start, 0)); // Start with color 0
+            vis[start] = 1;
+            colArr[start] = 0;
+
+            while (!q.isEmpty()) {
+                int currNode = q.peek().first;
+                int col = q.peek().second;
+                q.poll();
+
+                for (int it : adj.get(currNode)) {
+                    if (vis[it] == 0) {
+                        vis[it] = 1;
+                        colArr[it] = 1 - col; // Toggle color
+                        q.add(new pair(it, colArr[it]));
+                    } else if (colArr[it] == col) {
+                        return false; // Odd cycle found, return NO
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+    }
+}
