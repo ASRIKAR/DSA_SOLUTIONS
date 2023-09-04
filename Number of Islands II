@@ -1,0 +1,63 @@
+import java.util.*;
+
+public class Solution {
+    public static int[] numberOfIslandII(int n, int m, int[][] queries, int q) {
+        int[] result = new int[q];
+        int[][] grid = new int[n][m];
+        int[] parent = new int[n * m];
+        int[] rank = new int[n * m];
+        int islandCount = 0;
+
+        int[] dx = {0, -1, 0, 1};
+        int[] dy = {-1, 0, 1, 0};
+
+        Arrays.fill(parent, -1);
+
+        for (int i = 0; i < q; i++) {
+            int x = queries[i][0];
+            int y = queries[i][1];
+            if (grid[x][y] == 0) {
+                grid[x][y] = 1;
+                int currIndex = x * m + y;
+                parent[currIndex] = currIndex;
+                islandCount++;
+
+                for (int dir = 0; dir < 4; dir++) {
+                    int newX = x + dx[dir];
+                    int newY = y + dy[dir];
+                    int newIndex = newX * m + newY;
+
+                    if (newX >= 0 && newX < n && newY >= 0 && newY < m && grid[newX][newY] == 1) {
+                        int parentX = findParent(currIndex, parent);
+                        int parentY = findParent(newIndex, parent);
+                        if (parentX != parentY) {
+                            union(parentX, parentY, parent, rank);
+                            islandCount--;
+                        }
+                    }
+                }
+            }
+            result[i] = islandCount;
+        }
+
+        return result;
+    }
+
+    public static int findParent(int x, int[] parent) {
+        if (parent[x] != x) {
+            parent[x] = findParent(parent[x], parent);
+        }
+        return parent[x];
+    }
+
+    public static void union(int x, int y, int[] parent, int[] rank) {
+        if (rank[x] > rank[y]) {
+            parent[y] = x;
+        } else {
+            parent[x] = y;
+            if (rank[x] == rank[y]) {
+                rank[y]++;
+            }
+        }
+    }
+}
