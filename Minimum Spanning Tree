@@ -1,0 +1,86 @@
+import java.util.*;
+
+public class Solution {
+
+    public static class UnionFind {
+        int parent[];
+        int rank[];
+
+        UnionFind(int n) {
+            parent = new int[n];
+            rank = new int[n];
+
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+                rank[i] = 1;
+            }
+        }
+
+        public int findParent(int u) {
+            if (parent[u] == u) {
+                return u;
+            }
+            return findParent(parent[u]);
+        }
+
+        public void union(int x, int y) {
+            int rootX = findParent(x);
+            int rootY = findParent(y);
+            if (rootX != rootY) {
+                if (rank[rootX] < rank[rootY]) {
+                    parent[rootX] = rootY;
+                } else if (rank[rootY] < rank[rootX]) {
+                    parent[rootY] = rootX;
+                } else {
+                    parent[rootY] = rootX;
+                    rank[rootX]++;
+                }
+            }
+        }
+    }
+
+    public static class Edge implements Comparable<Edge> {
+        int src;
+        int des;
+        int wt;
+
+        Edge(int src, int des, int wt) {
+            this.src = src;
+            this.des = des;
+            this.wt = wt;
+        }
+
+        public int compareTo(Edge that) {
+            return this.wt - that.wt;
+        }
+    }
+
+    public static int minimumSpanningTree(ArrayList<ArrayList<Integer>> edges, int n) {
+        List<Edge> Edge = new ArrayList<>();
+        
+        for (ArrayList<Integer> edgeData : edges) {
+            int src = edgeData.get(0);
+            int des = edgeData.get(1);
+            int wt = edgeData.get(2);
+            Edge.add(new Edge(src, des, wt));
+        }
+
+        Collections.sort(Edge);
+        UnionFind uf = new UnionFind(n);
+        int minsp = 0;
+        
+        for (Edge edge : Edge) {
+            int src = edge.src;
+            int des = edge.des;
+            int wt = edge.wt;
+
+            if (uf.findParent(src) != uf.findParent(des)) {
+                minsp += wt;
+                uf.union(src, des);
+            }
+        }
+
+        return minsp;
+    }
+
+}
