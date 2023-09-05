@@ -1,0 +1,61 @@
+import java.util.*;
+
+public class Solution {
+    public static class FindUnion {
+        int[] parent;
+        int[] rank;
+
+        FindUnion(int n) {
+            parent = new int[n];
+            rank = new int[n];
+
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+                rank[i] = 1;
+            }
+        }
+
+        public int findParent(int x) {
+            if (parent[x] == x) {
+                return x;
+            }
+            return findParent(parent[x]);
+        }
+
+        public void union(int x, int y) {
+            int rootX = findParent(x);
+            int rootY = findParent(y);
+            if (rootX != rootY) {
+                if (rank[rootX] < rank[rootY]) {
+                    parent[rootX] = rootY;
+                } else if (rank[rootX] > rank[rootY]) {
+                    parent[rootY] = rootX;
+                } else {
+                    parent[rootY] = rootX;
+                    rank[rootX]++;
+                }
+            }
+        }
+    }
+
+    public static int findNumOfProvinces(int[][] roads, int n) {
+        FindUnion fu = new FindUnion(n);
+
+        // Loop through the roads matrix to perform union operations.
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) { // Start from i+1 to avoid processing the upper triangular part.
+                if (roads[i][j] == 1) {
+                    fu.union(i, j);
+                }
+            }
+        }
+
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            if (fu.findParent(i) == i) {
+                count++;
+            }
+        }
+
+        return count;
+    }
