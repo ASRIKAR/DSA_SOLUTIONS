@@ -1,0 +1,137 @@
+//{ Driver Code Starts
+import java.io.*;
+import java.util.*;
+
+
+class IntMatrix
+{
+    public static int[][] input(BufferedReader br, int n, int m) throws IOException
+    {
+        int[][] mat = new int[n][];
+        
+        for(int i = 0; i < n; i++)
+        {
+            String[] s = br.readLine().trim().split(" ");
+            mat[i] = new int[s.length];
+            for(int j = 0; j < s.length; j++)
+                mat[i][j] = Integer.parseInt(s[j]);
+        }
+        
+        return mat;
+    }
+    
+    public static void print(int[][] m)
+    {
+        for(var a : m)
+        {
+            for(int e : a)
+                System.out.print(e + " ");
+            System.out.println();
+        }
+    }
+    
+    public static void print(ArrayList<ArrayList<Integer>> m)
+    {
+        for(var a : m)
+        {
+            for(int e : a)
+                System.out.print(e + " ");
+            System.out.println();
+        }
+    }
+}
+
+class GFG {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t;
+        t = Integer.parseInt(br.readLine());
+        while(t-- > 0){
+            
+            int n; 
+            n = Integer.parseInt(br.readLine());
+            
+            
+            int m; 
+            m = Integer.parseInt(br.readLine());
+            
+            
+            int[][] connections = IntMatrix.input(br, m, 2);
+            
+            Solution obj = new Solution();
+            int res = obj.minimumConnections(n,connections);
+            
+            System.out.println(res);
+            
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+class Solution {
+    public static class UnionFind{
+        static int [] parent;
+        static int [] rank;
+        UnionFind(int n){
+            parent = new int[n];
+            rank = new int[n];
+            
+            
+            for(int i =0;i<n;i++){
+                parent[i] = i;
+                rank[i] = 1;
+            }
+        }
+        public static int FindParent(int x){
+            if(parent[x] == x){
+                return x;
+            }
+            return FindParent(parent[x]);
+        }
+        public static void Union(int x, int y) {
+            int rootX = FindParent(x);
+            int rootY = FindParent(y);
+        
+            if (rootX != rootY) {
+                if (rank[rootX] < rank[rootY]) {
+                    parent[rootX] = rootY;
+                } else if (rank[rootX] > rank[rootY]) {
+                    parent[rootY] = rootX;
+                } else {
+                    parent[rootY] = rootX;
+                    rank[rootX]++;
+                }
+            }
+        }
+
+    }
+    public static int minimumConnections(int n, int[][] connections) {
+        int count = 0;
+        // int m = connections[0].length;
+        UnionFind uf = new UnionFind(n);
+        for(int [] arr : connections){
+            int node1 = arr[0];
+            int node2 = arr[1];
+            if(uf.FindParent(node1) == uf.FindParent(node2)){
+                count++;
+            }
+            else
+            uf.Union(node1,node2);
+        }
+        int countC =0;
+        for(int i =0 ;i<n;i++){
+            if(uf.parent[i] == i){
+                countC++;
+            }
+        }
+        if(count >= countC-1){
+            return countC -1;
+        }
+        else{
+            return -1;
+        }
+    }
+}
+        
