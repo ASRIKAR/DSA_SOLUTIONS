@@ -1,0 +1,39 @@
+import java.util.* ;
+import java.io.*; 
+public class Solution 
+{
+    public static void  solve(int i,ArrayList<ArrayList<Integer>> edges, Stack<Integer> s, int [] vis){
+        vis[i] = 1;
+        for(int a : edges.get(i)){
+            if(vis[a] == 0){
+                solve(a,edges,s,vis);
+            }
+        }
+        s.push(i);
+    }
+    public static ArrayList<Integer> topologicalSort(ArrayList<ArrayList<Integer>> edges, int v, int e) 
+    {
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for(int i = 0;i< v;i++){
+            adj.add(new ArrayList<>());
+        }
+        for(ArrayList<Integer> a : edges){
+            int src = a.get(0);
+            int dis = a.get(1);
+            adj.get(src).add(dis);
+            // adj.get(dis).add(src);
+        }
+        int vis[] = new int[v];
+        Stack<Integer> s = new Stack<>();
+        for(int i =0;i< v;i++){
+            if(vis[i] == 0){
+                solve(i,adj,s,vis);
+            }
+        }
+        ArrayList<Integer> ans = new ArrayList<>();
+        while(!s.isEmpty()){
+            ans.add(s.pop());
+        }
+        return ans;
+    }
+}
