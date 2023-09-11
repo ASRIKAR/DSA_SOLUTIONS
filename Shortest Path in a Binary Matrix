@@ -1,0 +1,46 @@
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+	public static class Pair{
+		int first;
+		int second;
+		int third;
+		Pair(int first,int second,int third){
+			this.first = first;
+			this.second = second;
+			this.third = third;
+		}
+	}
+	public static int findShortestPath(int[][] mat, int sourceX, int sourceY, int destX, int destY, int n, int m) {
+		// Write your code here.
+		int [][] vis = new int[n][m];
+		for(int [] arr : vis){
+			Arrays.fill(arr,Integer.MAX_VALUE);
+		}
+		int [] adjR = {0,-1,0,1};
+		int [] adjC = {-1,0,1,0};
+		Queue<Pair> q = new LinkedList<>();
+		q.add(new Pair(sourceX, sourceY, 1));
+		vis[sourceX][sourceY] = 1;
+		while(!q.isEmpty()){
+			int x = q.peek().first;
+			int y = q.peek().second;
+			int count = q.peek().third;
+			q.poll();
+			for(int i = 0;i< 4;i++){
+				int adjRow = x + adjR[i];
+				int adjCol = y + adjC[i];
+				if(adjRow >=0 && adjRow < n && adjCol >=0 && adjCol <m && mat[adjRow][adjCol] == 1){
+					if(vis[adjRow][adjCol] > count + 1){
+						vis[adjRow][adjCol] = count + 1;
+						q.add(new Pair(adjRow,adjCol,count+1));
+					}
+				}
+			}
+		}
+		if(vis[destX][destY] == Integer.MAX_VALUE){
+			return -1;
+		}
+		return vis[destX][destY];
+	}
+}
