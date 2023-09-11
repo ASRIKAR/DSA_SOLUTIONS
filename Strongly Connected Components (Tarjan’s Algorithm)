@@ -1,0 +1,75 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+public class Solution {
+    public static void solve(int parent, List<List<Integer>> adj, int[] vis, Stack<Integer> s) {
+        vis[parent] = 1;
+        for (int child : adj.get(parent)) {
+            if (vis[child] == 0) {
+                solve(child, adj, vis, s);
+            }
+        }
+        s.push(parent);
+    }
+
+    public static void DFS(int parent, List<List<Integer>> adj, int[] vis, List<Integer> component) {
+        component.add(parent);
+        vis[parent] = 1;
+        for (int child : adj.get(parent)) {
+            if (vis[child] == 0) {
+                DFS(child, adj, vis, component);
+            }
+        }
+    }
+
+    public static List<List<Integer>> stronglyConnectedComponents(int n, int[][] edges) {
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>()); // Initialize adjacency list
+        }
+
+        for (int[] arr : edges) {
+            int src = arr[0];
+            int des = arr[1];
+            adj.get(src).add(des);
+        }
+
+        List<List<Integer>> ans = new ArrayList<>();
+        int[] vis = new int[n];
+        Stack<Integer> s = new Stack<>();
+
+        // Step 1: Perform the first DFS to fill the stack
+        for (int i = 0; i < n; i++) {
+            if (vis[i] == 0) {
+                solve(i, adj, vis, s);
+            }
+        }
+
+        // Reverse the edges to create a reversed adjacency list
+        List<List<Integer>> revAdj = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            revAdj.add(new ArrayList<>()); // Initialize reversed adjacency list
+        }
+
+        for (int[] arr : edges) {
+            int src = arr[0];
+            int des = arr[1];
+            revAdj.get(des).add(src);
+        }
+
+        Arrays.fill(vis, 0); // Reset vis array for the second DFS
+
+        // Step 2: Perform the second DFS using the reversed adjacency list and process SCCs
+        while (!s.isEmpty()) {
+            int curr = s.pop();
+            if (vis[curr] == 0) {
+                List<Integer> component = new ArrayList<>();
+                DFS(curr, revAdj, vis, component);
+                ans.add(component);
+            }
+        }
+
+        return ans;
+    }
+}
