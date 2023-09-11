@@ -1,0 +1,58 @@
+import java.util.Queue;
+import java.util.*;
+public class Solution {
+	public static class Pair{
+		int first;
+		int second;
+		int third;
+		Pair(int first,int second,int third){
+			this.first = first;
+			this.second = second;
+			this.third = third;
+		}
+	}
+	public static int minTimeToRot(int[][] grid, int n, int m) {
+		// Write your code here.
+		int [][] vis = new int[n][m];
+		for(int [] arr : vis){
+			Arrays.fill(arr,Integer.MAX_VALUE);
+		}
+		Queue<Pair> q = new LinkedList<>();
+		for(int i =0;i< n;i++){
+			for(int j =0;j< m;j++){
+				if(grid[i][j] == 2){
+					q.add(new Pair(i,j, 0));
+				}
+			}
+		}
+		int [] adjR = {0,-1,0,1};
+		int [] adjC = {-1,0,1,0};
+		int minCount = 0;
+		while(!q.isEmpty()){
+			int x = q.peek().first;
+			int y = q.peek().second;
+			int count = q.peek().third;
+			q.poll();
+			for(int i =0;i< 4;i++){
+				int adjRow = x + adjR[i];
+				int adjCol = y + adjC[i];
+				if(adjRow >=0 && adjRow <n && adjCol >=0 && adjCol < m && grid[adjRow][adjCol] == 1){
+					if(vis[adjRow][adjCol] > count + 1){
+						vis[adjRow][adjCol] = count +1;
+						q.add(new Pair(adjRow,adjCol,count +1));
+					}
+				}
+			}
+			minCount = count;
+		}
+		for(int i =0;i< n;i++){
+			for(int j =0;j< m;j++){
+				if(grid[i][j] == 1 && vis[i][j] == Integer.MAX_VALUE){
+					return -1;
+				}
+			}
+		}
+		return minCount;
+	}
+
+}
