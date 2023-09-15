@@ -1,0 +1,54 @@
+import java.util.*;
+public class Solution {
+    public static int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+    public static int longestIncreasingPath(ArrayList<ArrayList<Integer>> mat, int n, int m) {
+   
+        int[][] matrix = new int[n][m];
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                matrix[i][j] = mat.get(i).get(j);
+            }
+        }
+
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+
+        int[][] memo = new int[n][m];
+        int maxPathLength = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                int pathLength = dfs(matrix, i, j, memo);
+                maxPathLength = Math.max(maxPathLength, pathLength);
+            }
+        }
+
+        return maxPathLength;
+    }
+
+    public static int dfs(int[][] matrix, int x, int y, int[][] memo) {
+        if (memo[x][y] != 0) {
+            return memo[x][y];
+        }
+
+        int maxPath = 1;
+
+        for (int[] dir : dirs) {
+            int newX = x + dir[0];
+            int newY = y + dir[1];
+
+            if (newX >= 0 && newX < matrix.length && newY >= 0 && newY < matrix[0].length
+                    && matrix[newX][newY] > matrix[x][y]) {
+                int pathLength = 1 + dfs(matrix, newX, newY, memo);
+                maxPath = Math.max(maxPath, pathLength);
+            }
+        }
+
+        memo[x][y] = maxPath;
+        return maxPath;
+    }
+
+}
